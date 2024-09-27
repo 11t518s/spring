@@ -3,6 +3,7 @@ plugins {
 	kotlin("plugin.spring") version "1.6.21"
 	id("org.springframework.boot") version "2.7.18"
 	id("io.spring.dependency-management") version "1.1.6"
+	id("com.google.cloud.tools.jib") version "3.1.1"
 }
 
 group = "com.example"
@@ -11,6 +12,21 @@ version = "0.0.1-SNAPSHOT"
 java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(17))
+	}
+}
+
+jib {
+	from {
+		image = "arm64v8/openjdk:17-slim"
+	}
+	to {
+		image = "choiderrick/spring"
+		tags = setOf("latest", "1.0.1")
+	}
+	container {
+		ports = listOf("8080")
+		jvmFlags = listOf("-Xms512m", "-Xmx1024m")
+		mainClass = "com.example.demo.DemoApplicationKt"
 	}
 }
 
