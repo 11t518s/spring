@@ -19,4 +19,10 @@ class UserService(
     fun getUserByName(name: String): User? {
         return userRepository.findByName(name)
     }
+
+
+    @Transactional(readOnly = true)
+    fun getUserByNameWithScore(name: String): User? {
+        return userRepository.findByName(name)
+    }
 }

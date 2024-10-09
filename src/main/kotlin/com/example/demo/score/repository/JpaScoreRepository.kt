@@ -15,4 +15,6 @@ interface JpaScoreRepository : ScoreRepository, JpaRepository<Score, UUID> {
 
     @Query("select avg(score) from Score")
     fun findAverageScore(): Double
+
+    override fun findAll(): List<Score>
 }

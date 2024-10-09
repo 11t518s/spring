@@ -2,6 +2,8 @@ package com.example.demo.score.service
 
 import com.example.demo.entity.Score
 import com.example.demo.score.repository.JpaScoreRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -26,5 +28,10 @@ class ScoreService(
     fun getAverageScore(): Double {
         val averageScore = scoreRepository.findAverageScore()
         return averageScore
+    }
+
+    fun getScoreHistories(pageable: Pageable): Page<Score> {
+        val scores = scoreRepository.findAll(pageable)
+        return scores
     }
 }

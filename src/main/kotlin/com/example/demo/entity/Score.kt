@@ -1,5 +1,6 @@
 package com.example.demo.entity
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import org.hibernate.annotations.GenericGenerator
 import java.util.*
 import javax.persistence.*
@@ -15,6 +16,7 @@ class Score(
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "uid", updatable = false)
+    @JsonBackReference
     val user: User,
 
     val score: Int = 0
