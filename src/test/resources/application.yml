@@ -2,7 +2,7 @@ spring:
   application:
     name: demo
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/db?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: jdbc:mysql://localhost:3306/db
     username: mysql
     password: mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -10,20 +10,12 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration
 
 server:
   port: 8080
-
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 fixed:
   value:

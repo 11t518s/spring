@@ -1,9 +1,12 @@
 package com.example.demo.score.controller
 
+import com.example.demo.entity.Score
+import com.example.demo.entity.User
 import com.example.demo.score.dtos.GetStatsResponse
 import com.example.demo.score.dtos.SaveScoreRequest
-import com.example.demo.score.models.Score
 import com.example.demo.score.service.ScoreService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.FieldError
@@ -19,7 +22,7 @@ class ScoreController(
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
     fun saveScore(@Valid @RequestBody saveScoreRequest: SaveScoreRequest) {
-        val newScore = Score(score = saveScoreRequest.score)
+        val newScore = Score(score = saveScoreRequest.score, user = User(id = saveScoreRequest.uid))
         scoreService.saveScore(newScore)
     }
 
@@ -31,6 +34,15 @@ class ScoreController(
             averageScore = averageScore,
             highestScore = highestScore,
         )
+    }
+
+    @GetMapping("/histories")
+    fun getHistories(
+        @RequestParam page: Int,
+        @RequestParam size: Int
+    ): Page<Score> {
+        val pageable = PageRequest.of(page, size)
+        return scoreService.getScoreHistories(pageable)
     }
 
     @ExceptionHandler(NoSuchElementException::class)

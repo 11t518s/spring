@@ -1,9 +1,37 @@
 package com.example.demo.score.service
 
-import com.example.demo.score.models.Score
+import com.example.demo.entity.Score
+import com.example.demo.score.repository.JpaScoreRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Service
 
-interface ScoreService {
-    fun saveScore(score: Score)
-    fun getHighestScore(): Int
-    fun getAverageScore(): Double
+@Service
+class ScoreService(
+    private val scoreRepository: JpaScoreRepository
+) {
+    fun saveScore(score: Score) {
+        if (score.score < 0) {
+            throw IllegalArgumentException("0보다 작을 수 없습니다.")
+        }
+        if (score.score > 100) {
+            throw IllegalArgumentException("100보다 클 수 없습니다.")
+        }
+        scoreRepository.save(score)
+    }
+
+    fun getHighestScore(): Int {
+        val highestScore = scoreRepository.findHighestScore()
+        return highestScore
+    }
+
+    fun getAverageScore(): Double {
+        val averageScore = scoreRepository.findAverageScore()
+        return averageScore
+    }
+
+    fun getScoreHistories(pageable: Pageable): Page<Score> {
+        val scores = scoreRepository.findAll(pageable)
+        return scores
+    }
 }
